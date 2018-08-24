@@ -1,0 +1,39 @@
+
+
+发送人：sujin.xu@eddatech.com.cn
+
+抄送人：jz.qian@eddatech.com.cn; xzeng@eddatech.com.cn; gq.wei@edda-tech.com
+
+后台服务日报
+
+svn账号:
+sn.pan
+panshinian
+
+
+增加订单绑定多个医生功能，及与之相关功能的修改
+
+1.增加根据订单id查询所关联的所有医生接口；
+2.修改订单页面显示所关联的医生
+
+
+ export LANG=zh_CN.gbk
+
+
+
+export LUAJIT_LIB=/usr/local/luajit/lib  
+
+export LUAJIT_INC=/usr/local/luajit/include/luajit-2.0
+
+
+./configure  --prefix=/usr/local/nginx  
+--add-module=/usr/local/ngx_devel_kit-master 
+--add-module=/usr/local/lua-nginx-module-master 
+--add-module=/usr/local/nginx-upload-module-master 
+--add-module=/usr/local/nginx-upload-progress-module-master 
+--with-http_stub_status_module --with-http_ssl_module --with-cc-opt=' -D NGX_HAVE_OPENSSL_MD5_H=1 -D NGX_OPENSSL_MD5=1 -D NGX_HAVE_OPENSSL_SHA1_H=1 '
+
+
+--add-module=/usr/local/lua-nginx-module-master --with-stream  --with-luajit
+
+--with-http_ssl_module
