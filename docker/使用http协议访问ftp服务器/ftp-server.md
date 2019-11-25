@@ -71,7 +71,32 @@ docker restart vsftpd
 
 vim /etc/vsftpd/vsftpd.conf
 
-找到Local_umask=777  // FTP上本地的文件权限，默认是077,设为777
+找到Local_umask=000  // FTP上本地的文件权限，默认是077,设为000   
+
+**问题**   
+每次重启文件中会增加local_umask,而默认又是077，上传的文件又是没有权限。   
+
+**思考？**   
+为什么每次重启/etc/vsftpd/vsftpd.conf中会增加东西？  
+
+查看vsftpd进程：  
+ps -ef | grep vsftpd   
+
+root      2604  0.0  0.0  11692  1420 ?        Ss   16:06   0:00 /bin/bash /usr/sbin/run-vsftpd.sh   
+
+会发现它是以/usr/sbin/run-vsftpd.sh脚本启动的。   
+修改它：   
+vi /usr/sbin/run-vsftpd.sh    
+发现有这样一行echo "local_umask=${LOCAL_UMASK}" >> /etc/vsftpd/vsftpd.conf  
+修改：echo "local_umask=000" >> /etc/vsftpd/vsftpd.conf   
+
+
+
+
+ 
+
+
+
 
 
 

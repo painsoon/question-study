@@ -48,6 +48,7 @@ docker run --name nginx \
 -v /home/docker-nginx/log:/var/log/nginx \  
 -v /home/docker-nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf  \   
 -v /home/ftp:/home/ftp \   //把/home/ftp挂载出去映射到同ftp映射出去的目录
+--restart=always \  
 -d nginx
 
 
