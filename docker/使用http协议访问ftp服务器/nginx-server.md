@@ -18,13 +18,14 @@ docker exec -it nginx bash
 这需要你首先准备好nginx.con配置文件**   
 
 ### 2.映射启动  
-
+```
 docker run --name nginx \  
 -p 8088:80 \  
 -v /home/docker-nginx/nginx.conf:/etc/nginx/nginx.conf \  
 -v /home/docker-nginx/log:/var/log/nginx \  
 -v /home/docker-nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf  \  
 -d nginx  
+```   
 
 ### 参数解析  
 
@@ -41,7 +42,7 @@ docker run --name nginx \
 
 http访问ftp目录只需把路径location到ftp的目录即可。  
 所以只需把ftp的目录和location的目录映射到同一个宿主机的目录即可。    
-
+```
 docker run --name nginx \  
 -p 8088:80 \  
 -v /home/docker-nginx/nginx.conf:/etc/nginx/nginx.conf \  
@@ -50,6 +51,7 @@ docker run --name nginx \
 -v /home/ftp:/home/ftp \   //把/home/ftp挂载出去映射到同ftp映射出去的目录
 --restart=always \  
 -d nginx
+```     
 
 
 ## 配置nginx.conf   

@@ -1,4 +1,4 @@
-## rpm    
+# rpm    
 
 ### RPM包命名原则   
 　　httpd-2.2.15-15.el6.centos.l.i686.rpm    

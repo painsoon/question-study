@@ -5,6 +5,7 @@ docker search vsftpd
 docker pull fauria/vsftpd
 
 ## 创建vsftpd的container
+```
 docker run -d \
 -v /home/ftp:/home/vsftpd \
 -p 20:20 \
@@ -18,6 +19,7 @@ docker run -d \
 --name vsftpd \
 --restart=always \
 fauria/vsftpd
+```   
 
 ## 参数解析
 -v  :映射 docker 容器 ftp 文件根目录（冒号前面是宿主机的目录）
@@ -26,19 +28,19 @@ fauria/vsftpd
 
 
 ## 开启防火墙
-firewall-cmd --permanent --add-port=20/tcp
-firewall-cmd --permanent --add-port=21/tcp
-firewall-cmd --permanent --add-port=21100/tcp
-firewall-cmd --permanent --add-port=21101/tcp
-firewall-cmd --permanent --add-port=21102/tcp
-firewall-cmd --permanent --add-port=21103/tcp
-firewall-cmd --permanent --add-port=21104/tcp
-firewall-cmd --permanent --add-port=21105/tcp
-firewall-cmd --permanent --add-port=21106/tcp
-firewall-cmd --permanent --add-port=21107/tcp
-firewall-cmd --permanent --add-port=21108/tcp
-firewall-cmd --permanent --add-port=21109/tcp
-firewall-cmd --permanent --add-port=21110/tcp
+firewall-cmd --permanent --add-port=20/tcp  
+firewall-cmd --permanent --add-port=21/tcp   
+firewall-cmd --permanent --add-port=21100/tcp   
+firewall-cmd --permanent --add-port=21101/tcp    
+firewall-cmd --permanent --add-port=21102/tcp   
+firewall-cmd --permanent --add-port=21103/tcp   
+firewall-cmd --permanent --add-port=21104/tcp   
+firewall-cmd --permanent --add-port=21105/tcp   
+firewall-cmd --permanent --add-port=21106/tcp   
+firewall-cmd --permanent --add-port=21107/tcp    
+firewall-cmd --permanent --add-port=21108/tcp   
+firewall-cmd --permanent --add-port=21109/tcp    
+firewall-cmd --permanent --add-port=21110/tcp     
 firewall-cmd --reload
 
 ##  修改、完善vsftpd的设置  
