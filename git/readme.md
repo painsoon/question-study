@@ -8,7 +8,6 @@ git remote add origin git@server-name:path/repo-name.git
 ### 关联后第一次推送    
 git push -u origin master    
 
-
 ### 创建分支
 git branch (branchname)
 
