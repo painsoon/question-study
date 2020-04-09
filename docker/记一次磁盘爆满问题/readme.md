@@ -42,6 +42,9 @@ docker rm -v $(docker ps -aq -f status=dead)
 
 ## 通过du定位到是哪个镜像文件夹过大  
 
+## 查看完整的 containerId   
+docker ps --no-trunc    
+
 进入镜像发现有个json.log 结尾的文件很大，这个是部署的业务服务日志。   
 
 **这个问题是业务系统把log4j往控制台打日志的发生在容器读写层，所以容器会不断增大。可以关闭控制台打印，利用日志驱动框架把日志写到容器外部文件。**  

@@ -58,6 +58,9 @@ docker ps [OPTIONS]
 -a:显示所有容器  
 -l:最近创建的  
 
+## 查看完整的 containerId   
+docker ps --no-trunc    
+
 
 ## inspect   
 
