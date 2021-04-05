@@ -1,0 +1,139 @@
+# Kafka镜像：   
+wurstmeister/kafka   
+
+# Kafka-Manager镜像：   
+sheepkiller/kafka-manager  
+
+# 不指定版本默认拉取最新版本的镜像   
+docker pull wurstmeister/kafka   
+docker pull sheepkiller/kafka-manager   
+
+# 编写 docker-compose.yml 脚本  
+
+# 创建目录  
+/opt/docker_service/kafka/  
+
+# 创建文件   
+docker-compose.yml    
+
+```
+version: '3'
+services:
+ broker1:
+  image: wurstmeister/kafka
+  restart: always
+  hostname: broker1
+  container_name: broker1
+  privileged: true
+  ports:
+   - "9091:9092"
+  environment:
+   KAFKA_BROKER_ID: 1
+   KAFKA_LISTENERS: PLAINTEXT://broker1:9092
+   KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker1:9092
+   KAFKA_ADVERTISED_HOST_NAME: broker1
+   KAFKA_ADVERTISED_PORT: 9092
+   KAFKA_ZOOKEEPER_CONNECT: zoo1:2181/kafka1,zoo2:2181/kafka1,zoo3:2181/kafka1
+   JMX_PORT: 9988
+  volumes:
+   - /var/run/docker.sock:/var/run/docker.sock
+   - ./broker1:/kafka/kafka\-logs\-broker1
+  external_links:
+  - zoo1
+  - zoo2
+  - zoo3
+#  networks:
+#   default:
+#    ipv4_address: 172.23.0.14
+ 
+ broker2:
+  image: wurstmeister/kafka
+  restart: always
+  hostname: broker2
+  container_name: broker2
+  privileged: true
+  ports:
+   - "9092:9092"
+  environment:
+   KAFKA_BROKER_ID: 2
+   KAFKA_LISTENERS: PLAINTEXT://broker2:9092
+   KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker2:9092
+   KAFKA_ADVERTISED_HOST_NAME: broker2
+   KAFKA_ADVERTISED_PORT: 9092
+   KAFKA_ZOOKEEPER_CONNECT: zoo1:2181/kafka1,zoo2:2181/kafka1,zoo3:2181/kafka1
+   JMX_PORT: 9988
+  volumes:
+   - /var/run/docker.sock:/var/run/docker.sock
+   - ./broker2:/kafka/kafka\-logs\-broker2
+  external_links: # 连接本compose文件以外的container
+  - zoo1
+  - zoo2
+  - zoo3
+ # networks:
+ #  default:
+ #   ipv4_address: 172.23.0.15
+ 
+ broker3:
+  image: wurstmeister/kafka
+  restart: always
+  hostname: broker3
+  container_name: broker3
+  privileged: true
+  ports:
+   - "9093:9092"
+  environment:
+   KAFKA_BROKER_ID: 3
+   KAFKA_LISTENERS: PLAINTEXT://broker3:9092
+   KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker3:9092
+   KAFKA_ADVERTISED_HOST_NAME: broker3
+   KAFKA_ADVERTISED_PORT: 9092
+   KAFKA_ZOOKEEPER_CONNECT: zoo1:2181/kafka1,zoo2:2181/kafka1,zoo3:2181/kafka1
+   JMX_PORT: 9988
+  volumes:
+   - /var/run/docker.sock:/var/run/docker.sock
+   - ./broker3:/kafka/kafka\-logs\-broker3
+  external_links: # 连接本compose文件以外的container
+  - zoo1
+  - zoo2
+  - zoo3
+ # networks:
+ #  default:
+ #   ipv4_address: 172.23.0.16
+ 
+ kafka-manager:
+  image: sheepkiller/kafka-manager:latest
+  restart: always
+  container_name: kafka-manager
+  hostname: kafka-manager
+  ports:
+   - "9000:9000"
+  links:      # 连接本compose文件创建的container
+   - broker1
+   - broker2
+   - broker3
+  external_links:  # 连接本compose文件以外的container
+   - zoo1
+   - zoo2
+   - zoo3
+  environment:
+   ZK_HOSTS: zoo1:2181/kafka1,zoo2:2181/kafka1,zoo3:2181/kafka1
+   KAFKA_BROKERS: broker1:9092,broker2:9092,broker3:9092
+   APPLICATION_SECRET: letmein
+   KM_ARGS: -Djava.net.preferIPv4Stack=true
+#  networks:
+#   default:
+#    ipv4_address: 172.23.0.10
+ 
+networks:
+ default:
+  external:  # 使用已创建的网络
+   name: kafka-net
+
+
+```
+
+
+# 启动  
+docker-compose up -d  
+
+
