@@ -23,28 +23,22 @@
   firewall-cmd --reload    
 
 ## 配置国内镜像   
+
+### 安装wget  
+yum -y install wget  
+ 
 ### 备份原有repo   
 cd /etc/yum.repos.d/   
-
 mkdir backup     
-
 mv * ./backup   
-
-### 获取阿里centos的base-repo    
-wget -O /etc/yum.repos.d/CentOS-Base.repo   
-
-### 清除并重新     
-yum clean all   
-yum makecahe   
-yum -y update   
-
+  
 ### 获取阿里centos7的epel-repo   
-wget https://mirrors.aliyun.com/repo/epel-7.repo   
+wget https://mirrors.aliyun.com/repo/Centos-7.repo  
 
-### 清除并重新     
+### 清除并重新       
 yum clean all   
-yum makecahe   
-yum -y update
+yum makecache   
+yum -y update   
 
 
 # 安装docker   
