@@ -1,0 +1,96 @@
+#背景  
+一些华为云，arm架构的服务器pip安装docker-compose会报错，根据提示发现依赖的版本太低
+
+##准备Python3.8.2的安装包  
+wget https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tar.xz  
+
+##解压安装包，并移动到符合安装规范的目录内  
+tar xf  Python-3.8.2.tar.xz  && mv Python-3.8.2.tar.xz  /usr/local/src/python   
+
+##安装编译所需的依赖包  
+yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel  gcc -y  
+
+##进入解压后的Python目录，执行编译命令  
+cd /usr/local/src/python/
+
+##编译
+ ./configure --prefix=/usr/local/python3.8 --enable-shared CFLAGS=-fPIC 指定安装位置/usr/local/python3.8  
+或者直接./configure安装在/usr/local/src/python  
+
+##安装
+make && make install
+
+##配置环境  
+### 备份python软连接,pip如果不存在就不用备份
+mv -i /usr/bin/python /usr/bin/python.bak
+mv -i /usr/bin/pip /usr/bin/pip.bak
+
+### 创建python3的连接
+ln -sf /usr/local/python3.8/bin/* /usr/bin/*
+ ln -sf ./python3.8 /usr/bin/python
+
+### 配置动态库
+[root@localhost Python-3.8.0] vim /etc/ld.so.conf.d/python.conf
+### 写入内容
+/usr/local/python3.8/lib
+### 启用配置
+[root@localhost Python-3.8.0] ldconfig
+
+##解决yum和防火墙问题,替换原来的Python2.7可执行文件位置    
+ **将文件内的  /usr/bin/python2 改为  /usr/bin/python2.7**  
+vim /usr/libexec/urlgrabber-ext-down  
+ vim /usr/bin/yum  
+ vim /usr/bin/firewall-cmd  
+vim /usr/bin/firewall-offline-cmd  
+ vim /usr/sbin/firewalld  
+
+### 验证yum
+yum list
+### 验证firewall
+systemctl status firewalld.service
+
+##升级pip的版本为20版本,修改pip源为阿里云  
+```
+#!/bin/bash
+user=`whoami`
+echo "$user"
+direct=~/.pip
+if [ ! -d "$direct" ];then
+mkdir -p "$direct"
+else
+echo "this directory is exits"
+fi
+cat >~/.pip/pip.conf <<EOF
+[global]
+index-url=http://mirrors.aliyun.com/pypi/simple/
+[install]
+trusted-host=mirrors.aliyun.com
+EOF
+yum install python-pip -y
+pip install --upgrade pip
+
+```
+
+###更新pip到最新版
+pip install --upgrade pip
+**假如pip找不到,安装新的**
+wget https://bootstrap.pypa.io/get-pip.py  
+python get-pip.py   
+
+查看版本pip -V  
+若报-bash: /usr/bin/pip: No such file or directory
+**解决**  
+1.which pip   
+2.pip   
+3.type pip   
+4.hash -r  
+检查pip -V
+若报 command not found   
+export PATH=/usr/local/python3.8.2/bin:$PATH' >>~/.bashrc
+source ~/.bashrc
+
+
+
+
+
+

@@ -1,0 +1,17 @@
+version: '3'
+services:
+  cassandra:
+    image: cassandra:3.0
+    container_name: cassandra-1
+    restart: always
+    ports:
+      - "7000:7000"
+      - "9042:9042"
+    volumes:
+      - ./cassandra.yaml:/opt/cassandra/conf/cassandra.yaml
+      - /app/cassandra-cluster/data/cassandra:/var/lib/cassandra
+    environment:
+      - CASSANDRA_SEEDS=10.18.4.53,10.18.4.78
+      - CASSANDRA_BROADCAST_ADDRESS=10.18.4.53
+  
+    

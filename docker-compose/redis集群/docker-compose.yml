@@ -1,0 +1,83 @@
+version: "3.0"
+services:
+  redis-cluster1:
+    image: redis:5.0.7
+    container_name: redis-cluster1
+    ports:
+      - "6379:6379"
+      - "16379:16379"
+    volumes:
+      - /app/docker-compose/redis:/redis
+    command: /usr/local/bin/redis-server /redis/conf/redis.conf
+    
+    
+version: "3.0"
+services:
+  redis-cluster2:
+    image: redis:5.0.7
+    container_name: redis-cluster2
+    ports:
+      - "6379:6379"
+      - "16379:16379"
+    volumes:
+      - /app/docker-compose/redis:/redis
+    command: /usr/local/bin/redis-server /redis/conf/redis.conf
+    
+    
+version: "3.0"
+services:
+  redis-cluster3:
+    image: redis:5.0.7
+    container_name: redis-cluster3
+    ports:
+      - "6379:6379"
+      - "16379:16379"
+    volumes:
+      - /app/docker-compose/redis:/redis
+    command: /usr/local/bin/redis-server /redis/conf/redis.conf
+    
+    
+version: "3.0"
+services:
+  redis-cluster4:
+    image: redis:5.0.7
+    container_name: redis-cluster4
+    privileged: true
+    restart: always
+    ports:
+      - "16379:6379"
+      - "16380:16379"
+    volumes:
+      - /app/docker-compose/redis:/redis
+    command: /usr/local/bin/redis-server /redis/conf/redis.conf
+
+
+
+version: "3.0"
+services:
+  redis-cluster5:
+    image: redis:5.0.7
+    container_name: redis-cluster5
+    privileged: true
+    restart: always
+    ports:
+      - "6379:6379"
+      - "16379:16379"
+    volumes:
+      - /app/docker-compose/redis:/redis
+    command: /usr/local/bin/redis-server /redis/conf/redis.conf  
+    
+    
+version: "3.0"
+services:
+  redis-cluster6:
+    image: redis:5.0.7
+    container_name: redis-cluster6
+    privileged: true
+    restart: always
+    ports:
+      - "6379:6379"
+      - "16379:16379"
+    volumes:
+      - /app/docker-compose/redis:/redis
+    command: /usr/local/bin/redis-server /redis/conf/redis.conf

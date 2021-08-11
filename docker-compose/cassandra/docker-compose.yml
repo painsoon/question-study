@@ -1,0 +1,54 @@
+version: '2.2'
+services:
+  cassandra-node1:
+    image: bitnami/cassandra:latest
+    privileged: true
+    user: root
+    ports:
+      - "7000:7000"
+      - "9042:9042"
+    restart: always
+    environment:
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+      - CASSANDRA_SEEDS=10.18.4.53
+      - CASSANDRA_BROADCAST_ADDRESS=10.18.4.53
+      - CASSANDRA_ENABLE_RPC=true
+      - CASSANDRA_PASSWORD_SEEDER=yes
+      - CASSANDRA_PASSWORD=123456
+    volumes:
+      - /app/cassandra/init-scripts:/docker-entrypoint-initdb.d
+      - /app/cassandra/cassandra-persistence:/bitnami
+      - /var/run/docker.sock:/var/run/docker.sock
+
+      
+      
+      
+version: '2.2'
+services:     
+  cassandra-node2:
+    image: bitnami/cassandra:latest
+    user: root
+    ports:
+      - "7000:7000"
+      - "9042:9042"
+    restart: always
+    environment:
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+      - CASSANDRA_SEEDS=10.18.4.53
+      - CASSANDRA_BROADCAST_ADDRESS=10.18.4.80
+      - CASSANDRA_ENABLE_RPC=true
+      - CASSANDRA_PASSWORD_SEEDER=yes
+      - CASSANDRA_PASSWORD=123456
+    volumes:
+      - /app/cassandra/init-scripts:/docker-entrypoint-initdb.d
+      - /app/cassandra/cassandra-persistence:/bitnami
+      - /var/run/docker.sock:/var/run/docker.sock
+      
+      
+      
+      
+      
+docker run --name -p 9042:9042 some-cassandra  -d cassandra
+
+
+docker run --name my-cassandra -p 9042:9042 -d cassandra:3.0

@@ -1,0 +1,18 @@
+version: '3'
+services:
+   postgresql:
+      image: postgres:latest
+      container_name: postgresql
+      privileged: true
+      restart: always
+      volumes:
+         - /app/postgresql/data/:/var/lib/postgresql/
+      networks:
+         - net-db
+      ports:
+         - 5432:5432
+      environment:
+         - POSTGRES_PASSWORD=123456
+networks:
+   net-db:
+      external: false

@@ -1,0 +1,77 @@
+version: '3'
+services:
+   postgresql:
+      image: postgres:12.2
+      container_name: postgresql-master
+      privileged: true
+      restart: always
+      volumes:
+         - /app/postgresql/data-master:/var/lib/postgresql/data
+         - /var/run/docker.sock:/var/run/docker.sock
+      ports:
+         - 5432:5432
+      environment:
+         - POSTGRESQL_USERNAME=postgres
+         - POSTGRES_PASSWORD=123456
+         
+#集群
+#https://hub.docker.com/r/bitnami/postgresql         
+version: '2.2'         
+services:
+  postgresql-master:
+    image: 'bitnami/postgresql:latest'
+    container_name: postgresql-master
+    user: root
+    restart: always
+    ports:
+      - '5432:5432'
+    volumes:
+      - '/app/postgresql/data-master:/bitnami/postgresql'
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=repl_user
+      - POSTGRESQL_REPLICATION_PASSWORD=123456
+      - POSTGRESQL_USERNAME=mypg
+      - POSTGRESQL_PASSWORD=123456
+      - POSTGRESQL_DATABASE=thingsboard
+      - POSTGRESQL_SYNCHRONOUS_COMMIT_MODE=on
+      - POSTGRESQL_NUM_SYNCHRONOUS_REPLICAS=1
+    volumes:
+      - '/app/postgresql/postgresql-persistence:/bitnami/postgresql'
+      
+      
+version: '2.2'         
+services:     
+  postgresql-slave:
+    image: 'bitnami/postgresql:latest'
+    container_name: postgresql-slave
+    user: root
+    restart: always
+    ports:
+      - '5430:5432'
+    volumes:
+      - '/app/postgresql/data-slave:/bitnami/postgresql'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=repl_user
+      - POSTGRESQL_REPLICATION_PASSWORD=123456
+      - POSTGRESQL_USERNAME=mypg
+      - POSTGRESQL_PASSWORD=123456
+      - POSTGRESQL_MASTER_HOST=10.18.4.53
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
+
+
+chown -R 1001:1001 /app/postgresql/data-slave
+
+
+-d template1 -c 'create extension hstore';
+
+
+
+docker run -d -p 5432:5432 --name some-postgres -e POSTGRES_PASSWORD=123456 -e POSTGRES_USER=repl_user -e POSTGRES_DB=thingsboard postgres 
+
+
+docker run -i --rm postgres cat /usr/share/postgresql/postgresql.conf.sample > my-postgres.conf
+
+docker run -d -p 5432:5432 --name my-postgres -v "$PWD/my-postgres.conf":/etc/postgresql/postgresql.conf -e POSTGRES_PASSWORD=123456 -e POSTGRES_USER=repl_user -e POSTGRES_DB=thingsboard postgres -c 'config_file=/etc/postgresql/postgresql.conf' -c shared_buffers=256MB -c max_connections=500

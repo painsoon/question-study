@@ -1,0 +1,17 @@
+version: '3.0'
+services:
+  emqx:
+    image: emqx/emqx:v4.0.0
+    restart: always
+    privileged: true
+    ports:
+      - "18083:18083"
+      - "1883:1883"
+      - "5432:5432"
+    environment:
+      EMQX_NAME: foo_emqx
+      EMQX_HOST: 0.0.0.0
+    volumes:
+      - ./conf/data:/opt/emqx/data
+      - ./conf/etc:/opt/emqx/etc
+      - ./conf/log:/opt/emqx/log

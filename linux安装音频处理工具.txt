@@ -1,0 +1,55 @@
+##ubuntu:
+docker run -i -t -d  -p 9999:80 -p 4443:443  --privileged=true --net=host -v /app/ubuntu:/app --name=ubuntu ubuntu
+
+##安装ifconfig和ping命令：
+apt-get install net-tools    安装ifconfig命令
+apt-get install iputils-ping    安装ping命令
+
+##安装sox：
+sudo apt install sox
+sudo apt install lame
+sudo apt install libsox-fmt-all
+
+##安装ffmpeg：
+http://ffmpeg.org/releases/
+##例：4.4版本
+
+apt-get install  yasm texi2html libfaac-dev libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev libsdl1.2-dev libtheora-dev libvorbis-dev libvpx-dev libx11-dev libxfixes-dev libxvidcore-dev zlib1g-dev
+
+./configure --enable-gpl --enable-version3 --enable-nonfree --enable-postproc --enable-libfaac --enable-libmp3lame --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libx264 --enable-libxvid --enable-x11grab
+
+./configure --enable-gpl --enable-version3 --enable-nonfree --enable-postproc --enable-libmp3lame --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libxvid
+
+make
+
+checkinstall --pkgname=ffmpeg --pkgversion "4:4" --backup=no --deldoc=yes --fstrans=no --default
+
+##可能出现ffmpeg找不到，修改配置：
+ffmpeg默认安装目录为“/usr/local/lib
+
+##解决办法：
+###建立软链接：
+ln -s /usr/local/lib/libmp3lame.so.0.0.0 /usr/lib64/libmp3lame.so.0
+### 如果还未找到，可以通过以下查看ffmpeg的动态链接库哪些没有找到：
+ldd `which ffmpeg`
+查找输出内容，例：
+find /usr/local/lib/ | grep -E "libavdevice.so.54|libavfilter.so.3|libavcodec.so.54"
+发现都在/usr/local/lib
+
+#查看链接库配置文件
+more /etc/ld.so.conf | grep /usr/local/lib
+
+#如果不包含的话，需要编辑此文添加：
+vi /etc/ld.so.conf
+/usr/local/lib
+/usr/local/lib64
+
+##运行配置命令
+ldconfig
+
+##使用，例：
+ ffmpeg -i man.m4a -ab 8k -ar 8k -ac 1 man8.wav
+
+
+
+

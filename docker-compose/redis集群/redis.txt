@@ -1,0 +1,16 @@
+docker exec -it redis-cluster1  bash
+
+redis-cli -p 6479
+info cluster
+
+exit
+
+#redis-cli --cluster create 10.18.4.52:6379 10.18.4.53:6379 10.18.4.93:6379 10.18.4.80:6379 10.18.4.81:6379 10.18.4.78:6479 --cluster-replicas 1
+
+redis-cli --cluster create --cluster-replicas 1  10.18.4.52:6379 10.18.4.53:6379 10.18.4.93:6379 10.18.4.80:6379 10.18.4.81:6379 10.18.4.78:6479  
+
+
+#以及群方式启动
+
+redis-cli -c
+

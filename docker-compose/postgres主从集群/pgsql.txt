@@ -1,0 +1,54 @@
+##docker-compose安装pgsql
+
+version: '3'
+services:
+   postgresql:
+      image: postgres:latest
+      container_name: postgresql
+      privileged: true
+      restart: always
+      volumes:
+         - /app/postgresql/data/:/var/lib/postgresql/
+      networks:
+         - net-db
+      ports:
+         - 5432:5432
+      environment:
+         - POSTGRES_PASSWORD=123456
+networks:
+   net-db:
+      external: false
+
+
+##使用   
+###进入
+docker exec -it postgressql bash
+
+### 切换当前用户
+su - postgres
+
+###进入数据库,输入密码
+psql -U postgres -W
+
+##修改postgres配置文件  
+docker cp postgres:/var/lib/postgresql/data/pg_hba.conf /home  
+
+找到以下几行：  
+//# IPv4 local connections:
+host    all             all             127.0.0.1/32            ident
+
+替换ident为md5或者trust
+host    all             all             127.0.0.1/32            trust
+
+docker cp /home/pg_hba.conf postgres:/var/lib/postgresql/data
+  
+##修改postgresql.conf文件  
+ listen_addresses = ’localhost’，再将行开头都#去掉，并将行内容修改为 localhost 改成：*  
+listen_addresses = '*'
+默认只接受来自本机localhost的连接请求，* 允许数据库服务器监听来自任何主机的连接请求。   
+  
+
+
+
+
+
